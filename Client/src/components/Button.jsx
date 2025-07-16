@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Button = ({text}) => {
+const Button = ({text,btnFunction}) => {
   return (
     <button
       type=""
@@ -12,9 +12,10 @@ const Button = ({text}) => {
         shadow-[2px_2px_0px_0px_#BED1E7]
         dark:shadow-[2px_2px_0px_0px_#323C71]
         hover:shadow-[0]
-     
+    
         
         "
+        onClick={btnFunction}
     >
       {text}
     </button>
