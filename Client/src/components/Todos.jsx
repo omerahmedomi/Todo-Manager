@@ -1,12 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Input from './Input'
 import Button from './Button'
 import PlusSign from './PlusSign'
 import Todo from './Todo'
+import { useNavigate } from 'react-router-dom'
 
 const Todos = () => {
     const tabs=['All','Open','Completed']
     const [activeTab,setActiveTab]=useState(0)
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/");
+      }
+    }, []);
 const customBorder = { borderBottom: "solid 1px blue " };
     function changeTab(nav){
         
