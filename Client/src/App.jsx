@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import axios from "axios";
@@ -10,7 +9,6 @@ function App() {
   const [inputs, setInputs] = useState({});
   const [error, setError] = useState();
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const navigate = useNavigate();
@@ -33,7 +31,7 @@ function App() {
 
   const apiBase = "http://localhost:2000";
 
-  // const set
+
   function handleChange(e) {
     setError("");
     setInputs((prev) => ({
@@ -60,7 +58,7 @@ function App() {
     }
 
     try {
-      //  navigate('/todos')
+      
       setIsAuthenticating(true);
       setError("");
 
@@ -82,22 +80,6 @@ function App() {
         console.log("incoming responser", data);
       }
 
-      // if (data.token) {
-      //   token = data.token;
-      //   localStorage.setItem("token", token);
-
-      //   // authenicating into loading
-      //   // authBtn.innerText = "Loading...";
-
-      //   // // fetch todos
-      //   // await fetchTodos();
-
-      //   // // show dashboard
-      //   // showDashboard();
-      //   navigate('/todos')
-      // } else {
-      //   throw Error("❌ Failed to authenticate...");
-      // }
       if (data.token) {
         localStorage.setItem("token", data.token);
         navigate("/todos");

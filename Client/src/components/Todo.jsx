@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import axios from "axios";
 
 const Todo = ({ todo, onUpdate }) => {
@@ -7,14 +7,14 @@ const Todo = ({ todo, onUpdate }) => {
 
   async function updateTodo() {
     try {
-      const response = await axios.put(
+        await axios.put(
         apiBase + `todos/${todo.id}`,
-        { completed: true }, // or !todo.completed to toggle
+        { completed: true }, 
         {
           headers: { Authorization: token.current },
         }
       );
-      console.log("response", response.data);
+     
       if (typeof onUpdate === "function") onUpdate(); //refresh parent state
     } catch (error) {
       console.log("Update error:", error.response?.data || error.message);
@@ -23,16 +23,16 @@ const Todo = ({ todo, onUpdate }) => {
 
   async function deleteTodo() {
     try {
-      const response = await axios.delete(apiBase + `todos/${todo.id}`, {
+      await axios.delete(apiBase + `todos/${todo.id}`, {
         headers: { Authorization: token.current },
       });
-      console.log("response", response.data);
-      if (typeof onUpdate === "function") onUpdate(); //refresh parent state
+      
+      if (typeof onUpdate === "function") onUpdate(); 
     } catch (error) {
       console.log("Delete error:", error.response?.data || error.message);
     }
   }
-  console.log("Single todo", todo.completed);
+ 
   return (
     <div
       className="todo-list bg-[#F8FAFC] flex flex-col

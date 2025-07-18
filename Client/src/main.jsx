@@ -3,9 +3,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 import Todos from './components/Todos.jsx'
-import SlidingTabs from './components/SlidingTabs.jsx'
-const router=createBrowserRouter([
 
+const router=createBrowserRouter([
 {
   path:'/',
   element:<App/>
@@ -14,12 +13,6 @@ const router=createBrowserRouter([
   path:'/todos',
   element:<Todos/>
 },
-{
-  path:'/test',
-  element: <SlidingTabs/>
-}
-
-
 
 ])
 

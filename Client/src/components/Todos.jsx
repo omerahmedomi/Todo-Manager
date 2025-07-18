@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import PlusSign from "./PlusSign";
@@ -13,9 +13,9 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [openTodos, setOpenTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
-  const [addedTask,setAddedTask]=useState('')
-  const [error,setError]=useState('')
-const token=useRef(localStorage.getItem("token"))
+  const [addedTask, setAddedTask] = useState("");
+  const [error, setError] = useState("");
+  const token = useRef(localStorage.getItem("token"));
   const navigate = useNavigate();
   const apiBase = "http://localhost:2000/";
 
@@ -23,92 +23,70 @@ const token=useRef(localStorage.getItem("token"))
 
   useEffect(() => {
     if (!token.current) {
-      navigate(-1); // or navigate("/login")
+      navigate(-1);
       return;
     }
     setCheckedAuth(true);
   }, []);
 
- 
-const fetchTodos = async () => {
-     
-  // if (!token.current) {
-   
-  //   navigate(-1);
-    
-  //   return;
-  // }
+  const fetchTodos = async () => {
+    try {
+      const response = await axios.get(apiBase + "todos", {
+        headers: { Authorization: token.current },
+      });
+      setTodos(response.data);
+    } catch (error) {
+      console.log("Error fetching todos:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  try {
-    // setIsLoading(true);
-    const response = await axios.get(apiBase + "todos",{
-      headers: { Authorization: token.current },
-    });
-    setTodos(response.data);
-  } catch (error) {
-    console.log("Error fetching todos:", error);
-    setError(error.message)
-  } finally {
-    setIsLoading(false);
+  async function addTodo() {
+    if (!addedTask) {
+      alert("Add task input is empty!");
+      return;
+    }
+    try {
+      await axios.post(
+        apiBase + "todos",
+        { task: addedTask },
+        {
+          headers: { Authorization: token.current },
+        }
+      );
+
+      setAddedTask("");
+      await fetchTodos();
+    } catch (error) {
+      console.log(error);
+    }
   }
-};
 
-async function addTodo(){
-  if(!addedTask) { alert('Add task input is empty!'); return}
-  try{
-const response = await axios.post(apiBase+"todos",{task:addedTask},{
-  headers:{Authorization:token.current}
-})
-  console.log(response)
-  setAddedTask("");
-  await fetchTodos()
- 
-  }
-  catch(error){
-    console.log(error)
-
-  }
-  
-  
-}
-
-useEffect(() => {
-  setIsLoading(true);
-  fetchTodos();
-}, []);
+  useEffect(() => {
+    setIsLoading(true);
+    fetchTodos();
+  }, []);
 
   useEffect(() => {
     setOpenTodos(todos.filter((todo) => !todo.completed));
     setCompletedTodos(todos.filter((todo) => todo.completed));
-  }, [todos]); // <- runs whenever `todos` updates
+  }, [todos]);
 
   const customBorder = { borderBottom: "solid 1px blue " };
-  // console.log("Todods from server".todosData);
-  // console.log("Todos from todos", todos);
-  // console.log("Todos from openTodos", openTodos);
-  // console.log("Todos from completedTodos", completedTodos);
-  console.log(addedTask)
 
-  if(error){
-    return(
+  if (error) {
+    return (
       <div className="text-red-400 text-lg sm:text-2xl text-center pt-10 font-grenze">
         {error}
       </div>
-    )
+    );
   }
-  
-  // if (isLoading) {
-  //   return (
-  //     <div className="text-red-400 text-lg sm:text-2xl text-center pt-10 font-grenze">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
 
   if (!checkedAuth) return null;
 
   return (
-    
     <div className="p-4 flex flex-col space-y-4 flex-nowrap max-w-[800px] mx-auto dark:text-white">
       <h1 className="text-3xl font-grenze font-bold bg-gradient-to-r from-violet-600 to-violet-300 text-transparent bg-clip-text ">
         You have {todos.length} open tasks.
@@ -139,7 +117,9 @@ useEffect(() => {
         ))}
       </ul>
       <div className="todos space-y-4">
-        {isLoading ? <p className="dark:text-white font-eczar ">Fetching your tasks!</p>:todos.length > 0  ? (
+        {isLoading ? (
+          <p className="dark:text-white font-eczar ">Fetching your tasks!</p>
+        ) : todos.length > 0 ? (
           activeTab == 0 ? (
             todos.map((todo, index) => (
               <Todo key={index} todo={todo} onUpdate={fetchTodos} />
@@ -161,12 +141,18 @@ useEffect(() => {
       </div>
 
       <div className="add-todo flex gap-4 ">
-        <Input placeholder="Add task" name="task" type="text" btnFunction={addTodo} value={addedTask} onChange={(e)=>{
-          setAddedTask(e.target.value)
-        }}/>
+        <Input
+          placeholder="Add task"
+          name="task"
+          type="text"
+          btnFunction={addTodo}
+          value={addedTask}
+          onChange={(e) => {
+            setAddedTask(e.target.value);
+          }}
+        />
         <span>
-          <Button text={<PlusSign />} btnFunction={addTodo} 
-           />
+          <Button text={<PlusSign />} btnFunction={addTodo} />
         </span>
       </div>
     </div>
