@@ -107,7 +107,11 @@ app.put("/todos/:id", async (req, res) => {
   res.json({ message: "Todo updated" });
 });
 
-
+app.delete('/todos/:id',async (req,res)=>{
+  const {id}=req.params;
+  await pool.query(`DELETE FROM todos WHERE id = $1`,[id]);
+  res.json({message:"Todo deleted"})
+})
 app.listen(port,()=>{
     console.log("Running on port",port)
 })
