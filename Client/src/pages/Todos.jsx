@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import Input from "./Input";
-import Button from "./Button";
-import PlusSign from "./PlusSign";
-import Todo from "./Todo";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import PlusSign from "../components/PlusSign";
+import Todo from "../components/Todo";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
