@@ -55,11 +55,12 @@ const fetchTodos = async () => {
 
 async function addTodo(){
   try{
-const response = axios.post(apiBase+"todos",{task:addedTask},{
+const response = await axios.post(apiBase+"todos",{task:addedTask},{
   headers:{Authorization:token.current}
 })
   console.log(response)
   setAddedTask("");
+  await fetchTodos()
  
   }
   catch(error){
