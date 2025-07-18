@@ -54,6 +54,7 @@ const fetchTodos = async () => {
 };
 
 async function addTodo(){
+  if(!addedTask) { alert('Add task input is empty!'); return}
   try{
 const response = await axios.post(apiBase+"todos",{task:addedTask},{
   headers:{Authorization:token.current}
@@ -72,7 +73,7 @@ const response = await axios.post(apiBase+"todos",{task:addedTask},{
 }
 
 useEffect(() => {
-  
+  setIsLoading(true);
   fetchTodos();
 }, []);
 
@@ -138,7 +139,7 @@ useEffect(() => {
         ))}
       </ul>
       <div className="todos space-y-4">
-        {todos.length > 0 ? (
+        {isLoading ? <p className="dark:text-white font-eczar ">Fetching your tasks!</p>:todos.length > 0  ? (
           activeTab == 0 ? (
             todos.map((todo, index) => (
               <Todo key={index} todo={todo} onUpdate={fetchTodos} />
