@@ -14,24 +14,40 @@ const Todos = () => {
   const [openTodos, setOpenTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
   const [addedTask,setAddedTask]=useState('')
+  const [error,setError]=useState('')
 const token=useRef(localStorage.getItem("token"))
   const navigate = useNavigate();
   const apiBase = "http://localhost:2000/";
+
+  const [checkedAuth, setCheckedAuth] = useState(false);
+
+  useEffect(() => {
+    if (!token.current) {
+      navigate(-1); // or navigate("/login")
+      return;
+    }
+    setCheckedAuth(true);
+  }, []);
+
+ 
 const fetchTodos = async () => {
-  
-  if (!token.current) {
-    navigate("/");
-    return;
-  }
+     
+  // if (!token.current) {
+   
+  //   navigate(-1);
+    
+  //   return;
+  // }
 
   try {
-    setIsLoading(true);
+    // setIsLoading(true);
     const response = await axios.get(apiBase + "todos",{
       headers: { Authorization: token.current },
     });
     setTodos(response.data);
   } catch (error) {
     console.log("Error fetching todos:", error);
+    setError(error.message)
   } finally {
     setIsLoading(false);
   }
@@ -55,8 +71,9 @@ const response = axios.post(apiBase+"todos",{task:addedTask},{
 }
 
 useEffect(() => {
+  
   fetchTodos();
-}, [fetchTodos]);
+}, []);
 
   useEffect(() => {
     setOpenTodos(todos.filter((todo) => !todo.completed));
@@ -69,7 +86,27 @@ useEffect(() => {
   // console.log("Todos from openTodos", openTodos);
   // console.log("Todos from completedTodos", completedTodos);
   console.log(addedTask)
+
+  if(error){
+    return(
+      <div className="text-red-400 text-lg sm:text-2xl text-center pt-10 font-grenze">
+        {error}
+      </div>
+    )
+  }
+  
+  // if (isLoading) {
+  //   return (
+  //     <div className="text-red-400 text-lg sm:text-2xl text-center pt-10 font-grenze">
+  //       Loading...
+  //     </div>
+  //   );
+  // }
+
+  if (!checkedAuth) return null;
+
   return (
+    
     <div className="p-4 flex flex-col space-y-4 flex-nowrap max-w-[800px] mx-auto dark:text-white">
       <h1 className="text-3xl font-grenze font-bold bg-gradient-to-r from-violet-600 to-violet-300 text-transparent bg-clip-text ">
         You have {todos.length} open tasks.
