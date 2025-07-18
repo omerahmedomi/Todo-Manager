@@ -16,30 +16,30 @@ const Todos = () => {
 
   const navigate = useNavigate();
   const apiBase = "http://localhost:2000/";
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/");
-      return;
-    }
+const fetchTodos = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/");
+    return;
+  }
 
-    async function fetchTodos() {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(apiBase + "todos", {
-          headers: { Authorization: token },
-        });
-        const todosData = response.data;
-        setTodos(todosData);
-      } catch (error) {
-        console.log("Error fetching todos:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+  try {
+    setIsLoading(true);
+    const response = await axios.get(apiBase + "todos", {
+      headers: { Authorization: token },
+    });
+    setTodos(response.data);
+  } catch (error) {
+    console.log("Error fetching todos:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    fetchTodos();
-  }, []);
+
+useEffect(() => {
+  fetchTodos();
+}, []);
 
   useEffect(() => {
     setOpenTodos(todos.filter((todo) => !todo.completed));
@@ -68,29 +68,39 @@ const Todos = () => {
             }}
           >
             {tab}
-            <span className="font-eczar text-[#727272] font-[300]"> ( {index==0?todos.length:index==1?openTodos.length:completedTodos.length} )</span>
+            <span className="font-eczar text-[#727272] font-[300]">
+              {" "}
+              ({" "}
+              {index == 0
+                ? todos.length
+                : index == 1
+                ? openTodos.length
+                : completedTodos.length}{" "}
+              )
+            </span>
           </li>
         ))}
       </ul>
       <div className="todos space-y-4">
-        
-        {
-        
-        todos.length > 0 ? activeTab==0 ? (
-          todos.map((todo, index) => <Todo key={index} todo={todo} />)
-        ) 
-                
-        : activeTab==1?(
-          openTodos.map((todo, index) => <Todo key={index} todo={todo} />)
-        ): activeTab==2?(
-          completedTodos.map((todo, index) => <Todo key={index} todo={todo} />)
-        ):(
-          <p className="dark:text-white">No todos under {tabs[activeTab]}</p>
-        ):
-        (
+        {todos.length > 0 ? (
+          activeTab == 0 ? (
+            todos.map((todo, index) => (
+              <Todo key={index} todo={todo} onUpdate={fetchTodos} />
+            ))
+          ) : activeTab == 1 ? (
+            openTodos.map((todo, index) => (
+              <Todo key={index} todo={todo} onUpdate={fetchTodos} />
+            ))
+          ) : activeTab == 2 ? (
+            completedTodos.map((todo, index) => (
+              <Todo key={index} todo={todo} onUpdate={fetchTodos} />
+            ))
+          ) : (
+            <p className="dark:text-white">No todos under {tabs[activeTab]}</p>
+          )
+        ) : (
           <p className="dark:text-white">No todos</p>
-        )
-        }
+        )}
       </div>
 
       <div className="add-todo flex gap-4 ">

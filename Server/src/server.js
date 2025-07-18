@@ -97,7 +97,16 @@ res.json(todos)
 })
 
 
-app.post("/todos", (req, res) => {});
+app.put("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body; // use value from frontend
+  await pool.query(`UPDATE todos SET completed = $1 WHERE id = $2`, [
+    completed,
+    id,
+  ]);
+  res.json({ message: "Todo updated" });
+});
+
 
 app.listen(port,()=>{
     console.log("Running on port",port)
