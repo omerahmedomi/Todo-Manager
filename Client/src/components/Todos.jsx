@@ -68,16 +68,29 @@ const Todos = () => {
             }}
           >
             {tab}
-            <span className="font-eczar text-[#727272] font-[300]"> ( 1 )</span>
+            <span className="font-eczar text-[#727272] font-[300]"> ( {index==0?todos.length:index==1?openTodos.length:completedTodos.length} )</span>
           </li>
         ))}
       </ul>
       <div className="todos space-y-4">
-        {todos.length > 0 ? (
-          todos.map((todo, index) => <Todo key={index} todo={todo.task} />)
-        ) : (
+        
+        {
+        
+        todos.length > 0 ? activeTab==0 ? (
+          todos.map((todo, index) => <Todo key={index} todo={todo} />)
+        ) 
+                
+        : activeTab==1?(
+          openTodos.map((todo, index) => <Todo key={index} todo={todo} />)
+        ): activeTab==2?(
+          completedTodos.map((todo, index) => <Todo key={index} todo={todo} />)
+        ):(
+          <p className="dark:text-white">No todos under {tabs[activeTab]}</p>
+        ):
+        (
           <p className="dark:text-white">No todos</p>
-        )}
+        )
+        }
       </div>
 
       <div className="add-todo flex gap-4 ">
