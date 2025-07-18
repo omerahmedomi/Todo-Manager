@@ -43,18 +43,20 @@ const response = axios.post(apiBase+"todos",{task:addedTask},{
   headers:{Authorization:token.current}
 })
   console.log(response)
+  setAddedTask("");
+ 
   }
   catch(error){
     console.log(error)
 
   }
-  setAddedTask('')
+  
   
 }
 
 useEffect(() => {
   fetchTodos();
-}, [addedTask]);
+}, [fetchTodos]);
 
   useEffect(() => {
     setOpenTodos(todos.filter((todo) => !todo.completed));
