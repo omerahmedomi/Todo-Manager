@@ -112,6 +112,14 @@ app.delete('/todos/:id',async (req,res)=>{
   await pool.query(`DELETE FROM todos WHERE id = $1`,[id]);
   res.json({message:"Todo deleted"})
 })
+
+app.post('/todos',async(req,res)=>{
+  const {task}=req.body;
+  const result= await pool.query(`INSERT INTO todos(user_id,task) VALUES ($1,$2) RETURNING *`,[req.userId,task])
+  
+  res.json({id:result.rows[0].id,task,completed:0})
+})
+
 app.listen(port,()=>{
     console.log("Running on port",port)
 })

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import PlusSign from "./PlusSign";
@@ -13,20 +13,21 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [openTodos, setOpenTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
-
+  const [addedTask,setAddedTask]=useState('')
+const token=useRef(localStorage.getItem("token"))
   const navigate = useNavigate();
   const apiBase = "http://localhost:2000/";
 const fetchTodos = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  
+  if (!token.current) {
     navigate("/");
     return;
   }
 
   try {
     setIsLoading(true);
-    const response = await axios.get(apiBase + "todos", {
-      headers: { Authorization: token },
+    const response = await axios.get(apiBase + "todos",{
+      headers: { Authorization: token.current },
     });
     setTodos(response.data);
   } catch (error) {
@@ -36,10 +37,24 @@ const fetchTodos = async () => {
   }
 };
 
+async function addTodo(){
+  try{
+const response = axios.post(apiBase+"todos",{task:addedTask},{
+  headers:{Authorization:token.current}
+})
+  console.log(response)
+  }
+  catch(error){
+    console.log(error)
+
+  }
+  setAddedTask('')
+  
+}
 
 useEffect(() => {
   fetchTodos();
-}, []);
+}, [addedTask]);
 
   useEffect(() => {
     setOpenTodos(todos.filter((todo) => !todo.completed));
@@ -47,14 +62,15 @@ useEffect(() => {
   }, [todos]); // <- runs whenever `todos` updates
 
   const customBorder = { borderBottom: "solid 1px blue " };
-  console.log("Todods from server".todosData);
-  console.log("Todos from todos", todos);
-  console.log("Todos from openTodos", openTodos);
-  console.log("Todos from completedTodos", completedTodos);
+  // console.log("Todods from server".todosData);
+  // console.log("Todos from todos", todos);
+  // console.log("Todos from openTodos", openTodos);
+  // console.log("Todos from completedTodos", completedTodos);
+  console.log(addedTask)
   return (
     <div className="p-4 flex flex-col space-y-4 flex-nowrap max-w-[800px] mx-auto dark:text-white">
       <h1 className="text-3xl font-grenze font-bold bg-gradient-to-r from-violet-600 to-violet-300 text-transparent bg-clip-text ">
-        You have 2 open tasks.
+        You have {todos.length} open tasks.
       </h1>
       <ul
         className="navs flex gap  *:pb-4   border-r-3 border-b-[1px] border-stone-400 
@@ -99,14 +115,17 @@ useEffect(() => {
             <p className="dark:text-white">No todos under {tabs[activeTab]}</p>
           )
         ) : (
-          <p className="dark:text-white">No todos</p>
+          <p className="dark:text-white text-lg font-grenze">No tasks!</p>
         )}
       </div>
 
       <div className="add-todo flex gap-4 ">
-        <Input placeholder="Add task" />
+        <Input placeholder="Add task" name="task" type="text" btnFunction={addTodo} value={addedTask} onChange={(e)=>{
+          setAddedTask(e.target.value)
+        }}/>
         <span>
-          <Button text={<PlusSign />} />
+          <Button text={<PlusSign />} btnFunction={addTodo} 
+           />
         </span>
       </div>
     </div>
