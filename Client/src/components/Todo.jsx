@@ -1,6 +1,6 @@
 import React from "react";
 
-const Todo = () => {
+const Todo = ({todo}) => {
   return (
     <div
       className="todo-list bg-[#F8FAFC] flex flex-col
@@ -8,7 +8,7 @@ const Todo = () => {
     dark:bg-dark-blue
     "
     >
-      <p className="todo font-eczar">Lorem sdfhdf fdklfjd kdfjkd f </p>
+      <p className="todo font-eczar">{todo}</p>
       <div className="btns flex gap-4 font-grenze font-bold *:cursor-pointer ">
         <button className="bg-blue-600 text-white rounded-md px-4 py-0.5 dark:bg-blue-400 dark:text-black hover:bg-blue-400 dark:hover:bg-blue-500 transition-colors duration-300 ">
           Done

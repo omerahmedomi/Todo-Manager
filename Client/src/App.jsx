@@ -10,7 +10,7 @@ function App() {
   const [inputs, setInputs] = useState({});
   const [error, setError] = useState();
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const navigate = useNavigate();

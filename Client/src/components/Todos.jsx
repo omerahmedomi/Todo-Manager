@@ -1,28 +1,50 @@
-import React, { useState,useEffect } from 'react'
-import Input from './Input'
-import Button from './Button'
-import PlusSign from './PlusSign'
-import Todo from './Todo'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import Input from "./Input";
+import Button from "./Button";
+import PlusSign from "./PlusSign";
+import Todo from "./Todo";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Todos = () => {
-    const tabs=['All','Open','Completed']
-    const [activeTab,setActiveTab]=useState(0)
+  const tabs = ["All", "Open", "Completed"];
+  const [activeTab, setActiveTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos,setTodos]=useState([])
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+    const apiBase='http://localhost:2000/'
+ useEffect(() => {
+   const token = localStorage.getItem("token");
+   if (!token) {
+     navigate("/");
+     return;
+   }
 
-    useEffect(() => {
-      const token = localStorage.getItem("token");
+   async function fetchTodos() {
+     try {
+       setIsLoading(true);
+       const response = await axios.get(apiBase + "todos", {
+         headers: { Authorization: token },
+       });
+       const todosData = response.data;
+       setTodos(todosData);
+       console.log(todosData)
+       console.log(todos)
+     } catch (error) {
+       console.log("Error fetching todos:", error);
+     } finally {
+       setIsLoading(false);
+     }
+   }
 
-      if (!token) {
-        navigate("/");
-      }
-    }, []);
-const customBorder = { borderBottom: "solid 1px blue " };
-    function changeTab(nav){
-        
-    
-    }
+   fetchTodos();
+ }, []);
+
+
+ 
+  const customBorder = { borderBottom: "solid 1px blue " };
+  function changeTab(nav) {}
   return (
     <div className="p-4 flex flex-col space-y-4 flex-nowrap max-w-[800px] mx-auto dark:text-white">
       <h1 className="text-3xl font-grenze font-bold bg-gradient-to-r from-violet-600 to-violet-300 text-transparent bg-clip-text ">
@@ -45,8 +67,11 @@ const customBorder = { borderBottom: "solid 1px blue " };
         ))}
       </ul>
       <div className="todos space-y-4">
-        <Todo />
-        <Todo />
+        {todos.length > 0 ? (
+          todos.map((todo, index) => <Todo key={index} todo={todo.task} />)
+        ) : (
+          <p className="dark:text-white">No todos</p>
+        )}
       </div>
 
       <div className="add-todo flex gap-4 ">
@@ -57,6 +82,6 @@ const customBorder = { borderBottom: "solid 1px blue " };
       </div>
     </div>
   );
-}
+};
 
-export default Todos
+export default Todos;
