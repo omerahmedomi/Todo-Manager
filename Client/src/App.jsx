@@ -133,6 +133,7 @@ function App() {
           onChange={handleChange}
           value={inputs.email}
           type="email"
+          btnFunction={authenticate}
         />
         <Input
           name="password"
@@ -140,6 +141,7 @@ function App() {
           onChange={handleChange}
           value={inputs.password}
           type="password"
+          btnFunction={authenticate}
         />
         <Button
           text={isAuthenticating ? "Authenticating" : "Submit"}

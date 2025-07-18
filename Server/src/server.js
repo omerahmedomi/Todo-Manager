@@ -69,7 +69,7 @@ app.post("/auth/login", async(req, res) => {
     const result = await pool.query(`SELECT * FROM users WHERE username = $1 `,[username])
     const user=result.rows[0]
     if(!user){
-      return res.status(404).send({message:"User not found!"})
+      return res.status(404).send({message:"User not found!,Try signing up instead."})
     }
 
     const passwordIsValid=bcrypt.compareSync(password,user.password)

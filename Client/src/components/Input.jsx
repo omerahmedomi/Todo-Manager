@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Input = ({placeholder,onChange,value,type,name}) => {
+const Input = ({placeholder,onChange,value,type,name,btnFunction}) => {
   // const [inputVal,setInputVal]=useState('')
   // function handleChange(e){
   //   setInputVal(e.target.value)
@@ -27,6 +27,11 @@ const Input = ({placeholder,onChange,value,type,name}) => {
         value={value}
         placeholder={placeholder}
         onChange={(e)=>{onChange(e)}}
+        onKeyDown={(e)=>{
+          if(e.key=='Enter'){
+            btnFunction();
+          }
+        }}
       />
     </label>
   );
