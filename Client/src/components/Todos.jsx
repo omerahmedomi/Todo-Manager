@@ -10,41 +10,47 @@ const Todos = () => {
   const tabs = ["All", "Open", "Completed"];
   const [activeTab, setActiveTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [todos,setTodos]=useState([])
+  const [todos, setTodos] = useState([]);
+  const [openTodos, setOpenTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState([]);
 
   const navigate = useNavigate();
-    const apiBase='http://localhost:2000/'
- useEffect(() => {
-   const token = localStorage.getItem("token");
-   if (!token) {
-     navigate("/");
-     return;
-   }
+  const apiBase = "http://localhost:2000/";
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+      return;
+    }
 
-   async function fetchTodos() {
-     try {
-       setIsLoading(true);
-       const response = await axios.get(apiBase + "todos", {
-         headers: { Authorization: token },
-       });
-       const todosData = response.data;
-       setTodos(todosData);
-       console.log(todosData)
-       console.log(todos)
-     } catch (error) {
-       console.log("Error fetching todos:", error);
-     } finally {
-       setIsLoading(false);
-     }
-   }
+    async function fetchTodos() {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(apiBase + "todos", {
+          headers: { Authorization: token },
+        });
+        const todosData = response.data;
+        setTodos(todosData);
+      } catch (error) {
+        console.log("Error fetching todos:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-   fetchTodos();
- }, []);
+    fetchTodos();
+  }, []);
 
+  useEffect(() => {
+    setOpenTodos(todos.filter((todo) => !todo.completed));
+    setCompletedTodos(todos.filter((todo) => todo.completed));
+  }, [todos]); // <- runs whenever `todos` updates
 
- 
   const customBorder = { borderBottom: "solid 1px blue " };
-  function changeTab(nav) {}
+  console.log("Todods from server".todosData);
+  console.log("Todos from todos", todos);
+  console.log("Todos from openTodos", openTodos);
+  console.log("Todos from completedTodos", completedTodos);
   return (
     <div className="p-4 flex flex-col space-y-4 flex-nowrap max-w-[800px] mx-auto dark:text-white">
       <h1 className="text-3xl font-grenze font-bold bg-gradient-to-r from-violet-600 to-violet-300 text-transparent bg-clip-text ">
