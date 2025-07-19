@@ -97,6 +97,7 @@ const Todos = () => {
       >
         {tabs.map((tab, index) => (
           <li
+          key={index}
             style={activeTab == index ? customBorder : {}}
             onClick={() => {
               setActiveTab(index);
