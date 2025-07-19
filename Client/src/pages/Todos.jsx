@@ -17,9 +17,9 @@ const Todos = () => {
   const [error, setError] = useState("");
   const token = useRef(localStorage.getItem("token"));
   const navigate = useNavigate();
-  const apiBase = "http://localhost:2000/";
-
   const [checkedAuth, setCheckedAuth] = useState(false);
+  
+  const apiBase = "http://localhost:2000/";
 
   useEffect(() => {
     if (!token.current) {

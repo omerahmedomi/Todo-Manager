@@ -41,7 +41,7 @@ const Todo = ({ todo, onUpdate }) => {
     "
     >
       <p className="todo font-eczar">
-        {todo.task} {todo.completed}
+        {todo.task} 
       </p>
       <div className="btns flex gap-4 font-grenze font-bold *:cursor-pointer ">
         <button

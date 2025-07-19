@@ -39,7 +39,7 @@ app.use("/todos", authMiddleware);
 app.post("/auth/register", async (req, res) => {
 
   const { username, password } = req.body;
-  console.log(username, password);
+
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   try {
@@ -73,10 +73,13 @@ app.post("/auth/register", async (req, res) => {
   }
  
 });
+
+
+
 app.post("/auth/login", async (req, res) => {
 
   const { username, password } = req.body;
-  console.log(username, password);
+
 
   try {
     const result = await pool.query(
@@ -106,6 +109,8 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
+
+
 app.get("/todos", async (req, res) => {
 
   const response = await pool.query(`SELECT * FROM todos WHERE user_id =$1 `, [
@@ -115,6 +120,7 @@ app.get("/todos", async (req, res) => {
   res.json(todos);
 
 });
+
 
 app.put("/todos/:id", async (req, res) => {
 
@@ -130,6 +136,7 @@ app.put("/todos/:id", async (req, res) => {
 
 });
 
+
 app.delete("/todos/:id", async (req, res) => {
 
   const { id } = req.params;
@@ -138,6 +145,8 @@ app.delete("/todos/:id", async (req, res) => {
 
   res.json({ message: "Todo deleted" });
 });
+
+
 
 app.post("/todos", async (req, res) => {
 
@@ -151,6 +160,8 @@ app.post("/todos", async (req, res) => {
 
   res.json({ id: result.rows[0].id, task, completed: 0 });
 });
+
+
 
 app.listen(port, () => {
   console.log("Running on port", port);

@@ -68,14 +68,14 @@ function App() {
         });
 
         data = response.data;
-        console.log("incoming responser", data);
+        
       } else {
         const response = await axios.post(apiBase + "/auth/login", {
           username: email,
           password: password,
         });
         data = response.data;
-        console.log("incoming responser", data);
+        
       }
 
       if (data.token) {
@@ -85,7 +85,7 @@ function App() {
         throw new Error("❌ Failed to authenticate...");
       }
 
-      navigate("/todos");
+      
     } catch (error) {
       console.log(error);
       setError(error.response?.data?.message || error.message);
