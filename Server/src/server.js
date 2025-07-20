@@ -7,12 +7,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "Todo",
-  password: "Omer$$@1641",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
+
 
 const app = express();
 const port = process.env.PORT || 2000;
